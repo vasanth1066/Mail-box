@@ -63,13 +63,12 @@ const SignUp = () => {
   return (
     <Fragment>
       <img
-        src="https://wallpapers.com/images/featured/white-plain-background-cxs6kmx3wgbnzz0x.jpg"
-        alt="Description of the image"
+        src="https://png.pngtree.com/thumb_back/fh260/background/20211108/pngtree-abstract-blue-plain-background-with-modern-style-and-dynamic-lines-image_915412.png"
+        alt="image"
         style={{
-          display: "block",
-          width: "100%",
-          height: "100%",
-          objectFit: "cover",
+          width: "100vw",
+          height: "100vh",
+          pointerEvents: "none",
         }}
       />
       <div
