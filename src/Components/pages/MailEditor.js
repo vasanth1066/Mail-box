@@ -3,7 +3,7 @@ import { Container, Form, Button, InputGroup } from "react-bootstrap";
 
 import { Editor } from "react-draft-wysiwyg";
 import "../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
-import { EditorState, convertToRaw } from "draft-js";
+import { EditorState } from "draft-js";
 import { useNavigate } from "react-router-dom";
 
 const MailEditor = () => {
@@ -18,36 +18,41 @@ const MailEditor = () => {
     setEditorState(newEditorState);
   };
 
+  console.log("inedirtor", localStorage.getItem("email"));
+
   const onSubmitHandler = (e) => {
     setIsLoading(true);
     e.preventDefault();
     const to = toRef.current.value;
     const subject = subjectRef.current.value;
-    const editorContent = convertToRaw(editorState.getCurrentContent());
+    const editorContent = editorState.getCurrentContent().getPlainText();
+
+    const getMailID = localStorage.getItem("email");
+    const firebaseemail = getMailID.replace(/[.]/g, "");
+    console.log("inedirtor-----------", firebaseemail);
 
     const email = {
       recipient: to,
       subject: subject,
       emailContent: editorContent,
-      //   sender: mailSender,
+      sender: getMailID,
     };
-    fetch("https://mail-18d8e-default-rtdb.firebaseio.com/emails.json", {
-      method: "POST",
-      body: JSON.stringify(email),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
+    fetch(
+      `https://mail-18d8e-default-rtdb.firebaseio.com/emails/${firebaseemail}.json`,
+      {
+        method: "POST",
+        body: JSON.stringify(email),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    )
       .then((res) => {
         if (res.ok) {
           return res.json();
         } else {
           return res.json().then((data) => {
             let errormessage = "Authentication Failed";
-            if (data && data.error && data.error.message) {
-              errormessage = data.error.message;
-            }
-
             throw new Error(errormessage);
           });
         }
@@ -61,27 +66,6 @@ const MailEditor = () => {
       .catch((err) => {
         alert(err.message);
       });
-
-    // try {
-    //   const response = await axios.post(
-    //     "https://react-mailbox-client-4f470-default-rtdb.firebaseio.com/emails.json",
-    //     email,
-    //     {
-    //       headers: {
-    //         "Content-Type": "application/json",
-    //       },
-    //     }
-    //   );
-    //   const data = response.data;
-    //   if (response.status === 200) {
-    //     console.log(data);
-    //     dispatch(showNotification({ message: "Sent", variant: "success" }));
-    //   }
-    // } catch (error) {
-    //   console.log(error.message);
-    // } finally {
-    //   setIsLoading(false);
-    // }
   };
   return (
     <Container>
