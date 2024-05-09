@@ -1,4 +1,5 @@
 import { ListGroup, Row, Col, Form } from "react-bootstrap";
+import "../Mail.css";
 
 const MailList = (props) => {
   const { mail } = props;

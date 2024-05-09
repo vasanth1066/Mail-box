@@ -1,0 +1,97 @@
+.nav_bar{
+    border: 1px solid black;
+    background-color: #F4F4F4;
+    width: 100%;
+    border-bottom: 10px;
+      
+}
+
+.nav_bar button{
+    margin-left: 1200px;
+    margin-bottom: 5px;
+    margin-top: 5px;
+    border: none;
+    border-radius: 10px ;
+    background-color: rgb(238, 133, 133);
+    width: 100px;
+    color: white;
+    padding: 3px;
+    
+   
+   
+   
+}
+.nav_bar button:hover{
+   color:black;
+  
+}
+
+.nav_bar_vertical ul{
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    width: 15%;
+    background-color: #114b5f;
+    position: fixed;
+    height: 100%;
+    overflow: auto;
+
+
+
+}
+.nav_bar_vertical ul h5{
+    text-align: center;
+    font-size: 32px;
+    margin-bottom: 40%;
+    color: #f3e9d2;
+}
+
+
+.nav_bar_vertical li a{
+    
+    display: block;
+    color: #f3e9d2;
+    padding: 8px 16px;
+    text-decoration: none;
+    font-size: 16px;
+    margin-top: 7%;
+    
+}
+
+.nav_bar_vertical li a:hover{
+   background-color: aliceblue;
+   color: black;
+}
+.blankarea {
+    margin-left: 15%;
+    padding: 1px 16px;
+    height: 100%;
+   
+
+}
+img{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 50px;
+    width: 50%;
+   
+}.btn_btn{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 50px;
+    width: 50%;
+    border: none;
+    background-color:#bdd1d8;
+    padding: 10px;
+    border-radius: 30px;
+}
+.blankarea button:hover{
+    color:white;
+    background-color: burlywood;
+}
+.blankarea h3{
+    text-align: center;
+    padding: 2px;
+}

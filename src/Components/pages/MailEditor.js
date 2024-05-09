@@ -18,8 +18,6 @@ const MailEditor = () => {
     setEditorState(newEditorState);
   };
 
-  console.log("inedirtor", localStorage.getItem("email"));
-
   const onSubmitHandler = (e) => {
     setIsLoading(true);
     e.preventDefault();
@@ -68,50 +66,79 @@ const MailEditor = () => {
       });
   };
   return (
-    <Container>
-      <Form onSubmit={onSubmitHandler} className="p-1">
-        <InputGroup className="mb-3">
-          <InputGroup.Text id="basic-addon1">To</InputGroup.Text>
-          <Form.Control
-            placeholder="example@gmail.com"
-            aria-label="Username"
-            aria-describedby="basic-addon1"
-            ref={toRef}
-            required
-          />
-        </InputGroup>
-        <InputGroup className="mb-3">
-          <InputGroup.Text id="basic-addon1">Subject</InputGroup.Text>
-          <Form.Control
-            placeholder=""
-            aria-label="subject"
-            aria-describedby="basic-addon2"
-            ref={subjectRef}
-            required
-          />
-        </InputGroup>
-        <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
-          <Editor
-            toolbarClassName="py-3 border-bottom bg-light"
-            wrapperClassName="card mt-3"
-            editorClassName="card-body pt-0 "
-            editorStyle={{ minHeight: "20rem" }}
-            editorState={editorState}
-            onEditorStateChange={handleEditorStateChange}
-            options={{}}
-          />
-        </Form.Group>
-        <div>
-          <Button
-            type="submit"
-            variant="info "
-            className="bg-gradient shadow rounded-0 px-4"
-          >
-            {isLoading ? "Sending" : "Send"}
-          </Button>
+    <>
+      <div>
+        <div className="nav_bar_vertical">
+          <ul>
+            <h5>Mail Box</h5>
+            <li>
+              <a href=" /mail"> &#9993; Home</a>{" "}
+            </li>
+            <li>
+              <a href="/inbox">&#10003; Inbox</a>{" "}
+            </li>
+            <li>
+              <a href="/SentMail">&#10146; Sent</a>{" "}
+            </li>
+            <li>
+              <a href="/MailEditor">&#9998; Compose</a>{" "}
+            </li>
+            <li>
+              <a href="/trash"> &#10006; Trash</a>{" "}
+            </li>
+          </ul>
         </div>
-      </Form>
-    </Container>
+        <div className="blankarea">
+          <Container>
+            <Form onSubmit={onSubmitHandler} className="p-1">
+              <InputGroup className="mb-3">
+                <InputGroup.Text id="basic-addon1">To</InputGroup.Text>
+                <Form.Control
+                  placeholder="example@gmail.com"
+                  aria-label="Username"
+                  aria-describedby="basic-addon1"
+                  ref={toRef}
+                  required
+                />
+              </InputGroup>
+              <InputGroup className="mb-3">
+                <InputGroup.Text id="basic-addon1">Subject</InputGroup.Text>
+                <Form.Control
+                  placeholder=""
+                  aria-label="subject"
+                  aria-describedby="basic-addon2"
+                  ref={subjectRef}
+                  required
+                />
+              </InputGroup>
+              <Form.Group
+                className="mb-3"
+                controlId="exampleForm.ControlTextarea1"
+              >
+                <Editor
+                  toolbarClassName="py-3 border-bottom bg-light"
+                  wrapperClassName="card mt-3"
+                  editorClassName="card-body pt-0 "
+                  editorStyle={{ minHeight: "20rem" }}
+                  editorState={editorState}
+                  onEditorStateChange={handleEditorStateChange}
+                  options={{}}
+                />
+              </Form.Group>
+              <div>
+                <Button
+                  type="submit"
+                  variant="info "
+                  className="bg-gradient shadow rounded-0 px-4"
+                >
+                  {isLoading ? "Sending" : "Send"}
+                </Button>
+              </div>
+            </Form>
+          </Container>
+        </div>
+      </div>
+    </>
   );
 };
 

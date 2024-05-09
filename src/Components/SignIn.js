@@ -9,8 +9,10 @@ const SignIn = () => {
 
   const submitHandler = (event) => {
     event.preventDefault();
+
     const useremail = emailinputref.current.value;
     const userpassword = passwordinputref.current.value;
+    localStorage.setItem("email", useremail);
 
     fetch(
       "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyDuzV31KFVM_yKHIekGdzBogdlZRYWcMyU",
