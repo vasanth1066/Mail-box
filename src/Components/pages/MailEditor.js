@@ -6,7 +6,10 @@ import "../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { EditorState } from "draft-js";
 import { useNavigate } from "react-router-dom";
 
+import store from "../../Store";
+
 const MailEditor = () => {
+  console.log(store.getState().mail.recieved);
   const toRef = useRef();
   const subjectRef = useRef();
   const Navigate = useNavigate();
@@ -34,6 +37,8 @@ const MailEditor = () => {
       subject: subject,
       emailContent: editorContent,
       sender: getMailID,
+      hasread: false,
+      id: Math.random(),
     };
     fetch(
       `https://mail-18d8e-default-rtdb.firebaseio.com/emails/${firebaseemail}.json`,
@@ -56,15 +61,17 @@ const MailEditor = () => {
         }
       })
       .then((data) => {
-        console.log(data);
+        console.log(data.name);
         setIsLoading(false);
         alert("Successfully mail send!!!");
+
         Navigate("/mail");
       })
       .catch((err) => {
         alert(err.message);
       });
   };
+
   return (
     <>
       <div>
