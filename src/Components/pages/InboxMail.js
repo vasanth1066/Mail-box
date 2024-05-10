@@ -26,6 +26,8 @@ const InboxMail = () => {
       });
   };
 
+  const inboxmaildeletehandler = () => {};
+
   return (
     <>
       <div>
@@ -44,9 +46,6 @@ const InboxMail = () => {
             <li>
               <a href="/MailEditor">&#9998; Compose</a>{" "}
             </li>
-            <li>
-              <a href="/trash"> &#10006; Trash</a>{" "}
-            </li>
           </ul>
         </div>
 
@@ -60,8 +59,13 @@ const InboxMail = () => {
               </>
             ) : (
               <ListGroup variant="flush">
-                {Mails.map((mail) => (
-                  <MailList mail={mail} key={mail.id} />
+                {Mails.map((mail, index) => (
+                  <MailList
+                    mail={mail}
+                    key={index}
+                    check={false}
+                    onDelete={inboxmaildeletehandler}
+                  />
                 ))}
               </ListGroup>
             )}

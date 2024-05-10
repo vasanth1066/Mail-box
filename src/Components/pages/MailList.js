@@ -1,19 +1,19 @@
-import { ListGroup, Row, Col, Form, Modal, Button } from "react-bootstrap";
+import { ListGroup, Row, Col, Modal, Button } from "react-bootstrap";
 import { useState } from "react";
-import { useSelector } from "react-redux";
-import store from "../../Store";
+// import { useSelector } from "react-redux";
+// import store from "../../Store";
 
 const MailList = (props) => {
-  const [hasread, setHasread] = useState(false);
-  const { mail } = props;
-  console.log(store.getState().mail.recieved);
+  const { onDelete, check } = props;
+  const [mail, setMail] = useState(props.mail);
+  // console.log(store.getState().mail.recieved);
 
   const [isHovered, setIsHovered] = useState(false);
   const [showModal, setShowModal] = useState(false);
 
-  const reducerData = useSelector((state) => state.mail.recieved);
-  const reducerData2 = useSelector((state) => state.mail.unread);
-  console.log(reducerData2, "reducerData", reducerData);
+  // const reducerData = useSelector((state) => state.mail.recieved);
+  // const reducerData2 = useSelector((state) => state.mail.unread);
+  // console.log(reducerData2, "reducerData", reducerData);
 
   const handleMouseEnter = () => {
     setIsHovered(true);
@@ -27,14 +27,11 @@ const MailList = (props) => {
     setShowModal(true);
   };
 
-  const handleCloseModal = () => {
-    setShowModal(false);
-    setHasread(true);
-
+  const updatehasRead = () => {
     const getMailID = localStorage.getItem("email");
     const firebaseemail = getMailID.replace(/[.]/g, "");
     fetch(
-      `https://mail-18d8e-default-rtdb.firebaseio.com/emails/${firebaseemail}/-NxTEfas5IKKC6WtGB43.json`,
+      `https://mail-18d8e-default-rtdb.firebaseio.com/emails/${firebaseemail}/${mail.name}.json`,
       {
         method: "PATCH",
         body: JSON.stringify({ hasread: true }),
@@ -45,6 +42,10 @@ const MailList = (props) => {
     )
       .then((res) => {
         if (res.ok) {
+          setMail((prevMail) => ({
+            ...prevMail,
+            hasread: true,
+          }));
           return res.json();
         } else {
           return res.json().then((data) => {
@@ -54,11 +55,21 @@ const MailList = (props) => {
         }
       })
       .then((data) => {
-        console.log(data);
+        // console.log(data);
       })
       .catch((err) => {
         alert(err.message);
       });
+  };
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+    {
+      check && updatehasRead();
+    }
+  };
+  const handleDelete = () => {
+    onDelete(mail.id);
   };
 
   return (
@@ -75,26 +86,25 @@ const MailList = (props) => {
         <Row>
           <Col lg="3">
             <div className="d-flex">
-              <Form>
-                <Form.Check
-                  checked={mail.isChecked}
-                  onChange={() => {}}
-                  onClick={(e) => e.stopPropagation()}
-                />
-              </Form>
-
               <p className="fw-bold ps-2 m-0">
                 {" "}
-                {!hasread && <>&#x1f535;</>}
+                {!mail.hasread && <>&#x1f535;</>}
                 {mail.sender}
               </p>
             </div>{" "}
           </Col>
-          <Col lg="8" className="pt-1 pt-lg-0">
+          <Col lg="10" className="pt-1 pt-lg-0">
             <div>
               <span className="fw-bold">{mail.subject}</span>
               <span className="ps-4">{mail.emailContent}</span>{" "}
             </div>
+          </Col>
+          <Col lg="1">
+            {isHovered && (
+              <Button variant="danger" onClick={handleDelete}>
+                Delete
+              </Button>
+            )}
           </Col>
         </Row>
       </ListGroup.Item>
@@ -117,7 +127,7 @@ const MailList = (props) => {
         <Modal.Body>
           <p>
             <strong>Content:</strong>
-            <div> {mail.emailContent}</div>
+            {mail.emailContent}
           </p>
         </Modal.Body>
         <Modal.Footer>

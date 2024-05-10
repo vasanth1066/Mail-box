@@ -25,9 +25,6 @@ const Mail = () => {
             <li>
               <a href="/MailEditor">&#9998; Compose</a>{" "}
             </li>
-            <li>
-              <a href="/trash"> &#10006; Trash</a>{" "}
-            </li>
           </ul>
         </div>
         <div>
@@ -37,7 +34,7 @@ const Mail = () => {
         </div>
         <div className="blankarea">
           <h3>Mail Box Client</h3>
-          <img src="mail.jpg"></img>
+          <img src="mail.jpg" alt="inboximage"></img>
 
           <button className="btn_btn" onClick={OnComposemail}>
             &#9755; To Compose New Mail

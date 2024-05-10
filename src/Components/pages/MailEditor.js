@@ -6,10 +6,7 @@ import "../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { EditorState } from "draft-js";
 import { useNavigate } from "react-router-dom";
 
-import store from "../../Store";
-
 const MailEditor = () => {
-  console.log(store.getState().mail.recieved);
   const toRef = useRef();
   const subjectRef = useRef();
   const Navigate = useNavigate();
@@ -21,6 +18,35 @@ const MailEditor = () => {
     setEditorState(newEditorState);
   };
 
+  const postMailName = (name) => {
+    const getMailID = localStorage.getItem("email");
+    const firebaseemail = getMailID.replace(/[.]/g, "");
+    fetch(
+      `https://mail-18d8e-default-rtdb.firebaseio.com/emails/${firebaseemail}/${name}.json`,
+      {
+        method: "PATCH",
+        body: JSON.stringify({ name: name }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    )
+      .then((res) => {
+        if (res.ok) {
+          return res.json();
+        } else {
+          return res.json().then((data) => {
+            let errormessage = "Authentication Failed";
+            throw new Error(errormessage);
+          });
+        }
+      })
+      .then((data) => {})
+      .catch((err) => {
+        alert(err.message);
+      });
+  };
+
   const onSubmitHandler = (e) => {
     setIsLoading(true);
     e.preventDefault();
@@ -30,7 +56,6 @@ const MailEditor = () => {
 
     const getMailID = localStorage.getItem("email");
     const firebaseemail = getMailID.replace(/[.]/g, "");
-    console.log("inedirtor-----------", firebaseemail);
 
     const email = {
       recipient: to,
@@ -39,6 +64,7 @@ const MailEditor = () => {
       sender: getMailID,
       hasread: false,
       id: Math.random(),
+      name: "",
     };
     fetch(
       `https://mail-18d8e-default-rtdb.firebaseio.com/emails/${firebaseemail}.json`,
@@ -61,9 +87,9 @@ const MailEditor = () => {
         }
       })
       .then((data) => {
-        console.log(data.name);
         setIsLoading(false);
         alert("Successfully mail send!!!");
+        postMailName(data.name);
 
         Navigate("/mail");
       })
@@ -89,9 +115,6 @@ const MailEditor = () => {
             </li>
             <li>
               <a href="/MailEditor">&#9998; Compose</a>{" "}
-            </li>
-            <li>
-              <a href="/trash"> &#10006; Trash</a>{" "}
             </li>
           </ul>
         </div>

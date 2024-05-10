@@ -1,13 +1,37 @@
 import React, { useState, useEffect } from "react";
-import { Button, ListGroup } from "react-bootstrap";
+import { ListGroup } from "react-bootstrap";
 
 import MailList from "./MailList";
 
 const Sent = () => {
-  const onDeleteHandler = () => {};
-
   const [sentMails, setSentMails] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  const onDeleteHandler = (mail) => {
+    const id = mail.id;
+    const name = mail.name;
+    const updatedSentMails = sentMails.filter((mail) => mail.id !== id);
+    setSentMails(updatedSentMails);
+
+    const getMailID = localStorage.getItem("email");
+    const firebaseemail = getMailID.replace(/[.]/g, "");
+    fetch(
+      `https://mail-18d8e-default-rtdb.firebaseio.com/emails/${firebaseemail}/${name}.json`,
+      {
+        method: "DELETE",
+      }
+    )
+      .then((response) => {
+        if (response.ok) {
+          // Handle successful deletion
+        } else {
+          throw new Error("Failed to delete mail");
+        }
+      })
+      .catch((error) => {
+        console.error("Error deleting mail:", error);
+      });
+  };
 
   useEffect(() => {
     fetchSentMails();
@@ -26,9 +50,19 @@ const Sent = () => {
         return response.json();
       })
       .then((data) => {
-        const mails = Object.values(data);
+        const keys = Object.values(data);
+        let mails = [];
+        keys.forEach((key) => {
+          const mailwithid = {
+            ...data[key],
+            Mailid: key,
+          };
+
+          mails.push(mailwithid.Mailid);
+        });
         setSentMails(mails);
         setLoading(false);
+        // console.log(mails);
       })
       .catch((error) => {
         console.error("Error fetching data:", error);
@@ -53,27 +87,12 @@ const Sent = () => {
             <li>
               <a href="/MailEditor">&#9998; Compose</a>{" "}
             </li>
-            <li>
-              <a href="/trash"> &#10006; Trash</a>{" "}
-            </li>
           </ul>
         </div>
         <div></div>
         <div className="blankarea">
           <div className="border-bottom d-flex align-items-center py-2 px-1 mt-5 mt-lg-0">
             <h2> Sented Mail</h2>
-            <div className="ms-auto mx-lg-auto">
-              <Button
-                variant="danger"
-                className="border-0 px-2"
-                onClick={onDeleteHandler}
-              >
-                <p className="mx-auto p-0 m-0">
-                  <i className="bi text-warning pe-2 bi-trash3"></i>
-                  <span className="">Delete</span>
-                </p>
-              </Button>
-            </div>
           </div>
           {sentMails.length === 0 ? (
             <>
@@ -87,7 +106,12 @@ const Sent = () => {
           ) : (
             <ListGroup variant="flush">
               {sentMails.map((mail) => (
-                <MailList mail={mail} key={mail.id} />
+                <MailList
+                  mail={mail}
+                  key={mail.id}
+                  onDelete={() => onDeleteHandler(mail)}
+                  check={true}
+                />
               ))}
             </ListGroup>
           )}
