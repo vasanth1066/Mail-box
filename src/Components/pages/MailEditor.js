@@ -5,11 +5,14 @@ import { Editor } from "react-draft-wysiwyg";
 import "../../../node_modules/react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import { EditorState } from "draft-js";
 import { useNavigate } from "react-router-dom";
+import { authActions } from "../../Store/AuthSlice";
+import { useDispatch } from "react-redux";
 
 const MailEditor = () => {
   const toRef = useRef();
   const subjectRef = useRef();
   const Navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
   const [isLoading, setIsLoading] = useState(false);
@@ -98,6 +101,13 @@ const MailEditor = () => {
       });
   };
 
+  const mailId = localStorage.getItem("email");
+
+  const logouthandler = () => {
+    dispatch(authActions.logout());
+    Navigate("/SignIn");
+  };
+
   return (
     <>
       <div>
@@ -116,6 +126,8 @@ const MailEditor = () => {
             <li>
               <a href="/MailEditor">&#9998; Compose</a>{" "}
             </li>
+            <p>{mailId}</p>
+            <button onClick={logouthandler}>Logout</button>
           </ul>
         </div>
         <div className="blankarea">

@@ -66,8 +66,11 @@ const SignUp = () => {
         src="https://png.pngtree.com/thumb_back/fh260/background/20211108/pngtree-abstract-blue-plain-background-with-modern-style-and-dynamic-lines-image_915412.png"
         alt="image"
         style={{
-          width: "100vw",
-          height: "100vh",
+          width: "100%",
+          height: "auto",
+          maxWidth: "100%",
+          display: "block",
+          margin: "auto",
           pointerEvents: "none",
         }}
       />

@@ -1,11 +1,21 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import "./Mail.css";
+import { authActions } from "../Store/AuthSlice";
+import { useDispatch } from "react-redux";
 
 const Mail = () => {
   const Navigate = useNavigate();
+  const dispatch = useDispatch();
   const OnComposemail = () => {
     Navigate("/MailEditor");
+  };
+
+  const mailId = localStorage.getItem("email");
+
+  const logouthandler = () => {
+    dispatch(authActions.logout());
+    Navigate("/SignIn");
   };
   return (
     <div>
@@ -25,11 +35,14 @@ const Mail = () => {
             <li>
               <a href="/MailEditor">&#9998; Compose</a>{" "}
             </li>
+
+            <p>{mailId}</p>
+            <button onClick={logouthandler}>Logout</button>
           </ul>
         </div>
         <div>
           <div className="nav_bar">
-            <button>Logout</button>
+            <button onClick={logouthandler}>Logout</button>
           </div>
         </div>
         <div className="blankarea">

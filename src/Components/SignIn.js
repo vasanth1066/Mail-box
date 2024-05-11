@@ -1,18 +1,21 @@
 import React, { useRef } from "react";
 
 import { useNavigate } from "react-router-dom";
+import { authActions } from "../Store/AuthSlice";
+import { useDispatch } from "react-redux";
 
 const SignIn = () => {
   const emailinputref = useRef();
   const passwordinputref = useRef();
   const Navigate = useNavigate();
 
+  const dispatch = useDispatch();
+
   const submitHandler = (event) => {
     event.preventDefault();
 
     const useremail = emailinputref.current.value;
     const userpassword = passwordinputref.current.value;
-    localStorage.setItem("email", useremail);
 
     fetch(
       "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyDuzV31KFVM_yKHIekGdzBogdlZRYWcMyU",
@@ -42,8 +45,10 @@ const SignIn = () => {
         }
       })
       .then((data) => {
-        console.log("Logged in", data);
-        localStorage.setItem("token", data.idToken);
+        localStorage.setItem("isLogin", true);
+        console.log(data);
+        dispatch(authActions.login(data.idToken));
+        localStorage.setItem("email", useremail);
 
         Navigate("/mail");
       })
@@ -61,8 +66,12 @@ const SignIn = () => {
         src="https://png.pngtree.com/thumb_back/fh260/background/20211108/pngtree-abstract-blue-plain-background-with-modern-style-and-dynamic-lines-image_915412.png"
         alt="image"
         style={{
-          width: "100vw",
-          height: "100vh",
+          width: "100%",
+          height: "auto",
+          maxWidth: "100%",
+          display: "block",
+          margin: "auto",
+
           pointerEvents: "none",
         }}
       />

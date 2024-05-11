@@ -1,11 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { ListGroup } from "react-bootstrap";
+import { authActions } from "../../Store/AuthSlice";
 
 import MailList from "./MailList";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const Sent = () => {
   const [sentMails, setSentMails] = useState([]);
   const [loading, setLoading] = useState(true);
+  const dispatch = useDispatch();
+  const Navigate = useNavigate();
 
   const onDeleteHandler = (mail) => {
     const id = mail.id;
@@ -69,6 +74,13 @@ const Sent = () => {
         setLoading(false);
       });
   };
+
+  const mailId = localStorage.getItem("email");
+
+  const logouthandler = () => {
+    dispatch(authActions.logout());
+    Navigate("/SignIn");
+  };
   return (
     <>
       <div>
@@ -87,6 +99,8 @@ const Sent = () => {
             <li>
               <a href="/MailEditor">&#9998; Compose</a>{" "}
             </li>
+            <p>{mailId}</p>
+            <button onClick={logouthandler}>Logout</button>
           </ul>
         </div>
         <div></div>

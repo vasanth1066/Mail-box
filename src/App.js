@@ -9,18 +9,28 @@ import Sent from "./Components/pages/SentMail";
 
 import InboxMail from "./Components/pages/InboxMail";
 
+import { useSelector } from "react-redux";
+
 function App() {
+  const isLogin = useSelector((state) => state.auth.isLogin);
+  // const isLogin = localStorage.getItem("isLogin");
+  console.log("isLogin", isLogin);
+
   return (
     <Routes>
-      <Route path="/" element={<Mail />} />
-      <Route path="/SignUp" element={<SignUp />} />
       <Route path="/SignIn" element={<SignIn />} />
-      <Route path="/mail" element={<Mail />} />
-      <Route path="/MailEditor" element={<MailEditor />} />
-      <Route path="/SentMail" element={<Sent />} />
-      <Route path="/inbox" element={<InboxMail />} />
+      <Route path="/SignUp" element={<SignUp />} />
+      {isLogin && <Route path="/mail" element={<Mail />} />}
+      {isLogin && <Route path="/MailEditor" element={<MailEditor />} />}
+      {isLogin && <Route path="/SentMail" element={<Sent />} />}
+      {isLogin && <Route path="/inbox" element={<InboxMail />} />}
 
-      <Route path="*" element={<Navigate replace to="/mail" />}></Route>
+      {!isLogin && (
+        <Route path="/*" element={<Navigate replace to="/SignIn" />}></Route>
+      )}
+      {isLogin && (
+        <Route path="/*" element={<Navigate replace to="/mail" />}></Route>
+      )}
     </Routes>
   );
 }
