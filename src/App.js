@@ -1,5 +1,5 @@
 import "./App.css";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, Navigate } from "react-router-dom";
 
 import SignUp from "./Components/SignUp";
 import SignIn from "./Components/SignIn";
@@ -19,6 +19,8 @@ function App() {
       <Route path="/MailEditor" element={<MailEditor />} />
       <Route path="/SentMail" element={<Sent />} />
       <Route path="/inbox" element={<InboxMail />} />
+
+      <Route path="*" element={<Navigate replace to="/mail" />}></Route>
     </Routes>
   );
 }

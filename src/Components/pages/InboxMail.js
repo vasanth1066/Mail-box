@@ -5,8 +5,17 @@ import { useEffect, useState } from "react";
 const InboxMail = () => {
   const [Mails, setMails] = useState([]);
 
+  // useEffect(() => {
+  //   fetchinboxMails();
+  // }, []);
   useEffect(() => {
-    fetchinboxMails();
+    const intervalId = setInterval(() => {
+      fetchinboxMails();
+    }, 2000);
+
+    return () => {
+      clearInterval(intervalId);
+    };
   }, []);
 
   const fetchinboxMails = () => {
