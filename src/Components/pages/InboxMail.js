@@ -4,41 +4,53 @@ import { useEffect, useState } from "react";
 import { authActions } from "../../Store/AuthSlice";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import useApi from "../../Hooks/useApi";
 
 const InboxMail = () => {
-  const [Mails, setMails] = useState([]);
+  // const [Mails, setMails] = useState([]);
   const dispatch = useDispatch();
   const Navigate = useNavigate();
 
   // useEffect(() => {
   //   fetchinboxMails();
   // }, []);
-  useEffect(() => {
-    const intervalId = setInterval(() => {
-      fetchinboxMails();
-    }, 2000);
+  // useEffect(() => {
+  //   const intervalId = setInterval(() => {
+  //     fetchinboxMails();
+  //   }, 2000);
 
-    return () => {
-      clearInterval(intervalId);
-    };
-  }, []);
+  //   return () => {
+  //     clearInterval(intervalId);
+  //   };
+  // }, []);
 
-  const fetchinboxMails = () => {
-    fetch("https://mail-18d8e-default-rtdb.firebaseio.com/emails/inbox.json")
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Failed to fetch data");
-        }
-        return response.json();
-      })
-      .then((data) => {
-        const mails = Object.values(data);
-        setMails(mails);
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-      });
-  };
+  // const fetchinboxMails = () => {
+  //   const getMailID = localStorage.getItem("email");
+  //   const firebaseemail = getMailID.replace(/[.]/g, "");
+  //   fetch(
+  //     `https://mail-18d8e-default-rtdb.firebaseio.com/inbox/${firebaseemail}.json`
+  //   )
+  //     .then((response) => {
+  //       if (!response.ok) {
+  //         throw new Error("Failed to fetch data");
+  //       }
+  //       return response.json();
+  //     })
+  //     .then((data) => {
+  //       const mails = Object.values(data);
+  //       setMails(mails);
+  //     })
+  //     .catch((error) => {
+  //       console.error("Error fetching data:", error);
+  //     });
+  // };
+
+  const getMailID = localStorage.getItem("email");
+  const firebaseemail = getMailID.replace(/[.]/g, "");
+  const [Mails] = useApi(
+    `https://mail-18d8e-default-rtdb.firebaseio.com/inbox/${firebaseemail}.json`
+  );
+  // console.log(Mails);
 
   const inboxmaildeletehandler = () => {};
 
@@ -74,7 +86,7 @@ const InboxMail = () => {
 
         <div className="blankarea">
           <div>
-            {Mails.length === 0 ? (
+            {!Mails ? (
               <>
                 <div className="d-flex mt-5 pt-5 justify-content-center align-items-center">
                   <h4>Your inbox is empty!</h4>

@@ -14,7 +14,7 @@ import { useSelector } from "react-redux";
 function App() {
   const isLogin = useSelector((state) => state.auth.isLogin);
   // const isLogin = localStorage.getItem("isLogin");
-  console.log("isLogin", isLogin);
+  // console.log("isLogin", isLogin);
 
   return (
     <Routes>
